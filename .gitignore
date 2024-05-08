@@ -1,3 +1,13 @@
+# IDE related
+.vscode/*
+.idea
+.history/
+*.vsix
+
+# OS-specific
+.DS_Store
+
+# GO related stuff
 # If you prefer the allow list template instead of the deny list, see community template:
 # https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
 #
@@ -19,3 +29,24 @@
 
 # Go workspace file
 go.work
+
+# SVELTE, TS related
+# Dependency directories
+node_modules/
+
+# Test coverage
+coverage
+*.lcov
+
+# Optional eslint cache
+.eslintcache
+
+# dotenv environment variables file
+.env
+.env.test
+
+# build output
+dist
+.vercel
+
+tmp
