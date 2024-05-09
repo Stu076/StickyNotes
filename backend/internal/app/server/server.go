@@ -3,6 +3,7 @@ package server
 import (
 	"janstupica/StickyNotes/logger"
 
+	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
 )
 
@@ -18,6 +19,15 @@ func New() *Server {
 	}
 }
 
-func (s *Server) Run(port int) {
+func (s *Server) Run() error {
+	router := gin.Default()
+	router.Use(
+		gin.Recovery(),
+		gin.Logger(),
+	)
 
+	api := router.Group("/api/v1")
+
+	_ = api
+	return nil
 }

@@ -9,10 +9,11 @@ import (
 )
 
 const (
-	configDir     = "../"
-	configName    = "config"
-	configType    = ".yml"
-	configDefault = "config.default.yml"
+	configDir      = "./"
+	configName     = "config"
+	configFileType = ".yml"
+	configType     = "yaml"
+	configDefault  = "config.default.yml"
 )
 
 func Init() bool {
@@ -30,7 +31,7 @@ func Init() bool {
 	err = viper.ReadInConfig()
 
 	if err != nil {
-		fmt.Println("Something went wrong Initializing the config: ", err)
+		fmt.Println("Something went wrong Initializing the config 1: ", err)
 		return false
 	}
 
@@ -38,7 +39,7 @@ func Init() bool {
 }
 
 func checkForConfig() (bool, error) {
-	fileInfo, err := os.Stat(configDir + configName + configType)
+	fileInfo, err := os.Stat(configDir + configName + configFileType)
 
 	if err == nil {
 		return !fileInfo.IsDir(), nil
@@ -61,7 +62,7 @@ func createConfig() error {
 	}
 	defer defaultConf.Close()
 
-	conf, err := os.Create(configDir + configName + configType)
+	conf, err := os.Create(configDir + configName + configFileType)
 	if err != nil {
 		return err
 	}
