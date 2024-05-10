@@ -56,6 +56,10 @@ func HelloWorld(g *gin.Context) {
 	g.JSON(http.StatusOK, "Hello World!")
 }
 
+// @BasePath		/api/v1
+// @Title StickyNote API
+// @Version 1.0
+// @Description This is the API for StickyNotes App.
 func (s *Server) Run() error {
 	router := gin.Default()
 	router.Use(

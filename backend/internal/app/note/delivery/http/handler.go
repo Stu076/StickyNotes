@@ -30,6 +30,7 @@ func New(log *zerolog.Logger, useCase note.UseCase) *Handler {
 // @Tags note
 // @Accept json
 // @Produce json
+// @Param   note body models.Note true "user password"
 // @Success 200 {object} models.Note
 // @Failure 400 {string} http.StatusBadRequest
 // @Failure 500 {string} http.StatusInternalServerError
@@ -62,6 +63,7 @@ func (h *Handler) Create(ctx *gin.Context) {
 // @Tags note
 // @Accept json
 // @Produce json
+// @Param   note body models.Note true "user password"
 // @Success 200 {object} models.Note
 // @Failure 400 {string} http.StatusBadRequest
 // @Failure 500 {string} http.StatusInternalServerError
@@ -92,7 +94,6 @@ func (h *Handler) Update(ctx *gin.Context) {
 // @Description Deletes an existing sticky note.
 // @Tags note
 // @Param id path int true "Note ID"
-// @Produce int
 // @Success 200 {object} models.Note
 // @Failure 500 {string} http.StatusInternalServerError
 // @Router /note/delete/{id} [delete]

@@ -1,3 +1,19 @@
+definitions:
+  models.Note:
+    properties:
+      content:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+      updatedAt:
+        type: string
+      userId:
+        type: integer
+    type: object
 info:
   contact: {}
 paths:
@@ -16,4 +32,131 @@ paths:
       summary: ping example
       tags:
       - example
+  /note/add:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new sticky note.
+      parameters:
+      - description: user password
+        in: body
+        name: note
+        required: true
+        schema:
+          $ref: '#/definitions/models.Note'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Note'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Create new Sticky Note
+      tags:
+      - note
+  /note/delete/{id}:
+    delete:
+      description: Deletes an existing sticky note.
+      parameters:
+      - description: Note ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Note'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Delete existing Sticky Note
+      tags:
+      - note
+  /note/get/{id}:
+    get:
+      description: Fetches a sticky note.
+      parameters:
+      - description: Note ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Note'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get Sticky Note
+      tags:
+      - note
+  /note/get/all/{userId}:
+    get:
+      description: Fetches all sticky notes for user.
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Note'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get all Sticky Notes for User
+      tags:
+      - note
+  /note/update:
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing sticky note.
+      parameters:
+      - description: user password
+        in: body
+        name: note
+        required: true
+        schema:
+          $ref: '#/definitions/models.Note'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Note'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Update existing Sticky Note
+      tags:
+      - note
 swagger: "2.0"
