@@ -3,6 +3,10 @@ package server
 import (
 	"context"
 	"janstupica/StickyNotes/docs"
+	"janstupica/StickyNotes/internal/app/database"
+	note "janstupica/StickyNotes/internal/app/note"
+	notestorage "janstupica/StickyNotes/internal/app/note/storage/database"
+	noteusecase "janstupica/StickyNotes/internal/app/note/usecase"
 	"janstupica/StickyNotes/logger"
 	"net/http"
 	"os"
@@ -18,13 +22,22 @@ import (
 type Server struct {
 	Log        *zerolog.Logger
 	HttpServer *http.Server
+	DB         *database.DB
+
+	NoteUseCase note.UseCase
 }
 
 func New() *Server {
 	log := logger.Init("debug")
+	database := database.New()
+
+	noteStorage := notestorage.New(database.Client)
 
 	return &Server{
 		Log: &log,
+		DB:  database,
+
+		NoteUseCase: noteusecase.New(noteStorage),
 	}
 }
 
