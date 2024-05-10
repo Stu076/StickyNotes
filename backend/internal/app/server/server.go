@@ -5,6 +5,7 @@ import (
 	"janstupica/StickyNotes/docs"
 	"janstupica/StickyNotes/internal/app/database"
 	note "janstupica/StickyNotes/internal/app/note"
+	notehttp "janstupica/StickyNotes/internal/app/note/delivery/http"
 	notestorage "janstupica/StickyNotes/internal/app/note/storage/database"
 	noteusecase "janstupica/StickyNotes/internal/app/note/usecase"
 	"janstupica/StickyNotes/logger"
@@ -70,6 +71,8 @@ func (s *Server) Run() error {
 			eg.GET("/helloworld", HelloWorld)
 		}
 	}
+
+	notehttp.RegisterHTTPEndpoints(api, s.Log, s.NoteUseCase)
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
