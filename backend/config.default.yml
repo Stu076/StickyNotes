@@ -2,5 +2,5 @@ system:
     port: 8080
 
 database:
-    supabase_url: ""
-    supabase_key: ""
+    supabaseUrl: ""
+    supabaseKey: ""
