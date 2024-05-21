@@ -20,6 +20,6 @@ func RegisterHTTPEndpoints(
 		routes.PUT("/update", handler.Update)
 		routes.DELETE("/delete/:id", handler.Delete)
 		routes.GET("/get/:id", handler.Get)
-		routes.GET("/get/all/:tripId", handler.GetAll)
+		routes.GET("/get/all/:userId", handler.GetAll)
 	}
 }

@@ -17,13 +17,13 @@ func New(
 	}
 }
 
-func (n *NoteUseCase) Create(note *models.Note) (*models.Note, error) {
+func (n *NoteUseCase) Create(note *models.Note) (*[]models.Note, error) {
 	result, err := n.storage.Create(note)
 
 	return result, err
 }
 
-func (n *NoteUseCase) Update(note *models.Note) (*models.Note, error) {
+func (n *NoteUseCase) Update(note *models.Note) (*[]models.Note, error) {
 	results, err := n.storage.Update(note)
 
 	return results, err

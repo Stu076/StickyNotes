@@ -4,6 +4,7 @@ import (
 	"janstupica/StickyNotes/internal/app/models"
 	"janstupica/StickyNotes/internal/app/note"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
@@ -39,7 +40,7 @@ func (h *Handler) Create(ctx *gin.Context) {
 	input := new(models.Note)
 
 	if err := ctx.BindJSON(input); err != nil {
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
 		log.Error().Msg(err.Error())
 		return
 	}
@@ -47,7 +48,7 @@ func (h *Handler) Create(ctx *gin.Context) {
 	result, err := h.useCase.Create(input)
 
 	if err != nil {
-		ctx.AbortWithStatus(http.StatusInternalServerError)
+		ctx.IndentedJSON(http.StatusInternalServerError, gin.H{"Message": err.Error()})
 		log.Error().Msg(err.Error())
 		return
 	}
@@ -72,14 +73,14 @@ func (h *Handler) Update(ctx *gin.Context) {
 	note := new(models.Note)
 
 	if err := ctx.BindJSON(note); err != nil {
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
 		log.Error().Msg(err.Error())
 		return
 	}
 
 	result, err := h.useCase.Update(note)
 	if err != nil {
-		ctx.AbortWithStatus(http.StatusInternalServerError)
+		ctx.IndentedJSON(http.StatusInternalServerError, gin.H{"Message": err.Error()})
 		log.Error().Msg(err.Error())
 		return
 	}
@@ -94,19 +95,32 @@ func (h *Handler) Update(ctx *gin.Context) {
 // @Description Deletes an existing sticky note.
 // @Tags note
 // @Param id path int true "Note ID"
-// @Success 200 {object} models.Note
+// @Success 200 {string} http.StatusOK
+// @Failure 400 {string} http.StatusBadRequest
 // @Failure 500 {string} http.StatusInternalServerError
 // @Router /note/delete/{id} [delete]
 func (h *Handler) Delete(ctx *gin.Context) {
-	id := ctx.GetInt("id")
+	id, err := strconv.Atoi(ctx.Param("id"))
 
-	if err := h.useCase.Delete(id); err != nil {
-		ctx.AbortWithStatus(http.StatusInternalServerError)
+	if id == 0 {
+		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"Message": "missing ID"})
+		log.Error().Msg("Missing ID for note.")
+		return
+	}
+
+	if err != nil {
+		ctx.IndentedJSON(http.StatusInternalServerError, gin.H{"Message": err.Error()})
 		log.Error().Msg(err.Error())
 		return
 	}
 
-	ctx.Status(http.StatusOK)
+	if err := h.useCase.Delete(id); err != nil {
+		ctx.IndentedJSON(http.StatusInternalServerError, gin.H{"Message": err.Error()})
+		log.Error().Msg(err.Error())
+		return
+	}
+
+	ctx.IndentedJSON(http.StatusOK, gin.H{"Message": "OK"})
 }
 
 // @BasePath		/api/v1
@@ -118,15 +132,28 @@ func (h *Handler) Delete(ctx *gin.Context) {
 // @Param id path int true "Note ID"
 // @Produce json
 // @Success 200 {object} models.Note
+// @Failure 400 {string} http.StatusBadRequest
 // @Failure 500 {string} http.StatusInternalServerError
 // @Router /note/get/{id} [get]
 func (h *Handler) Get(ctx *gin.Context) {
-	id := ctx.GetInt("id")
+	id, err := strconv.Atoi(ctx.Param("id"))
+
+	if id == 0 {
+		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"Message": "missing ID"})
+		log.Error().Msg("Missing id for note.")
+		return
+	}
+
+	if err != nil {
+		ctx.IndentedJSON(http.StatusInternalServerError, gin.H{"Message": err.Error()})
+		log.Error().Msg(err.Error())
+		return
+	}
 
 	result, err := h.useCase.Get(id)
 
 	if err != nil {
-		ctx.AbortWithStatus(http.StatusInternalServerError)
+		ctx.IndentedJSON(http.StatusInternalServerError, gin.H{"Message": err.Error()})
 		log.Error().Msg(err.Error())
 		return
 	}
@@ -143,15 +170,28 @@ func (h *Handler) Get(ctx *gin.Context) {
 // @Param userId path int true "User ID"
 // @Produce json
 // @Success 200 {object} models.Note
+// @Failure 400 {string} http.StatusBadRequest
 // @Failure 500 {string} http.StatusInternalServerError
 // @Router /note/get/all/{userId} [get]
 func (h *Handler) GetAll(ctx *gin.Context) {
-	userId := ctx.GetInt("userId")
+	userId, err := strconv.Atoi(ctx.Param("userId"))
+
+	if userId == 0 {
+		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"Message": "missing UserID"})
+		log.Error().Msg("Missing userId for note.")
+		return
+	}
+
+	if err != nil {
+		ctx.IndentedJSON(http.StatusInternalServerError, gin.H{"Message": err.Error()})
+		log.Error().Msg(err.Error())
+		return
+	}
 
 	results, err := h.useCase.GetAll(userId)
 
 	if err != nil {
-		ctx.AbortWithStatus(http.StatusInternalServerError)
+		ctx.IndentedJSON(http.StatusInternalServerError, gin.H{"Message": err.Error()})
 		log.Error().Msg(err.Error())
 		return
 	}
